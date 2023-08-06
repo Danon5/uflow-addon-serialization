@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Linq;
+using System.Reflection;
 using UFlow.Core.Runtime;
 
 namespace UFlow.Addon.Serialization.Core.Runtime {
@@ -7,9 +7,32 @@ namespace UFlow.Addon.Serialization.Core.Runtime {
         private static readonly ISerializer<T> s_serializer;
 
         static SerializerCache() {
-            var type = UFlowUtils.Reflection.GetInheritors<ISerializer<T>>().FirstOrDefault();
-            if (type == null) return;
-            s_serializer = Activator.CreateInstance(type) as ISerializer<T>;
+            var thisAssembly = Assembly.GetAssembly(typeof(SerializerCache<>));
+            var serializerType = typeof(ISerializer<>);
+            foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies()) {
+                if (assembly == thisAssembly) continue;
+                foreach (var type in assembly.GetTypes()) {
+                    if (!UFlowUtils.Reflection.IsDerivedType(type, serializerType)) continue;
+                    s_serializer = Activator.CreateInstance(type) as ISerializer<T>;
+                    return;
+                }
+            }
+            var genericType = typeof(T);
+            var stringType = typeof(string);
+            var arraySerializerType = typeof(ArraySerializer<>);
+            var stringSerializerType = typeof(StringSerializer);
+            var unmanagedSerializerType = typeof(UnmanagedSerializer<>);
+            if (genericType == stringType)
+                s_serializer = Activator.CreateInstance(stringSerializerType) as ISerializer<T>;
+            else if (genericType.IsArray) {
+                var arraySerializerGenericType = arraySerializerType.MakeGenericType(genericType.GetElementType());
+                s_serializer = Activator.CreateInstance(arraySerializerGenericType) as ISerializer<T>;
+            }
+            else if (UFlowUtils.Reflection.IsUnmanaged(genericType)) {
+                var unmanagedSerializerGenericType = unmanagedSerializerType.MakeGenericType(genericType);
+                s_serializer = Activator.CreateInstance(unmanagedSerializerGenericType) as ISerializer<T>;
+            }
+            else throw new Exception($"Unable to create valid serializer for type {genericType}");
         }
 
         public static bool TryGet(out ISerializer<T> serializer) {

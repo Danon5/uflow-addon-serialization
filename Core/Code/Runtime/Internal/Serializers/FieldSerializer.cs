@@ -20,6 +20,7 @@ namespace UFlow.Addon.Serialization.Core.Runtime {
             var fieldPtr = (void*)((byte*)objPtr + m_offset);
             var fieldValue = Unsafe.Read<TField>(fieldPtr);
             serializer.Deserialize(buffer, ref fieldValue);
+            Unsafe.Write(fieldPtr, fieldValue);
         }
     }
 }

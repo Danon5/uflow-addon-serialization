@@ -13,7 +13,9 @@ namespace UFlow.Addon.Serialization.Core.Runtime {
         
         public void Deserialize(in ByteBuffer buffer, ref T[] value) {
             var length = buffer.ReadInt();
-            if (length != value.Length)
+            if (value == null)
+                value = new T[length];
+            else if (length != value.Length)
                 Array.Resize(ref value, length);
             for (var i = 0; i < length; i++) {
                 if (!SerializerCache<T>.TryGetWithThrowOnFailure(out var serializer)) continue;

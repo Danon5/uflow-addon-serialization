@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 
 namespace UFlow.Addon.Serialization.Core.Runtime {
-    public static class Serialization {
+    public static class SerializerAPI {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Serialize<T>(in ByteBuffer buffer, ref T value) {
             if (!SerializerCache<T>.TryGetWithThrowOnFailure(out var serializer)) return;

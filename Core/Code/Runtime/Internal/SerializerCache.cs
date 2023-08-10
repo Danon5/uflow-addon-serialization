@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using UFlow.Core.Runtime;
 
 namespace UFlow.Addon.Serialization.Core.Runtime {
@@ -22,6 +23,7 @@ namespace UFlow.Addon.Serialization.Core.Runtime {
             var arraySerializerType = typeof(ArraySerializer<>);
             var stringSerializerType = typeof(StringSerializer);
             var unmanagedSerializerType = typeof(UnmanagedSerializer<>);
+            var genericSerializerType = typeof(GenericSerializer<>);
             if (genericType == stringType)
                 s_serializer = Activator.CreateInstance(stringSerializerType) as ISerializer<T>;
             else if (genericType.IsArray) {
@@ -32,7 +34,10 @@ namespace UFlow.Addon.Serialization.Core.Runtime {
                 var unmanagedSerializerGenericType = unmanagedSerializerType.MakeGenericType(genericType);
                 s_serializer = Activator.CreateInstance(unmanagedSerializerGenericType) as ISerializer<T>;
             }
-            else throw new Exception($"Unable to create valid serializer for type {genericType}");
+            else {
+                var genericSerializerGenericType = genericSerializerType.MakeGenericType(genericType);
+                s_serializer = Activator.CreateInstance(genericSerializerGenericType) as ISerializer<T>;
+            }
         }
 
         public static bool TryGet(out ISerializer<T> serializer) {
@@ -52,5 +57,8 @@ namespace UFlow.Addon.Serialization.Core.Runtime {
             serializer = s_serializer;
             return true;
         }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool Exists() => s_serializer != null;
     }
 }

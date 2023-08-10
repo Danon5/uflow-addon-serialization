@@ -1,4 +1,7 @@
-﻿namespace UFlow.Addon.Serialization.Core.Runtime {
+﻿using UnityEngine.Scripting;
+
+namespace UFlow.Addon.Serialization.Core.Runtime {
+    [Preserve]
     internal sealed class UnmanagedSerializer<T> : ISerializer<T> where T : unmanaged {
         public void Serialize(in ByteBuffer buffer, ref T value) => buffer.WriteUnsafe(value);
 

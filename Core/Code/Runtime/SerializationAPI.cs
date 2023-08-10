@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 
 namespace UFlow.Addon.Serialization.Core.Runtime {
-    public static class SerializerAPI {
+    public static class SerializationAPI {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Serialize<T>(in ByteBuffer buffer, ref T value) {
             if (!SerializerCache<T>.TryGetWithThrowOnFailure(out var serializer)) return;
@@ -24,14 +24,14 @@ namespace UFlow.Addon.Serialization.Core.Runtime {
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void SerializeField<TObject>(in ByteBuffer buffer, ref TObject obj, in FieldInfo info) {
-            if (!FieldSerializerCache<TObject>.TryGetWithThrowOnFailure(info, out var serializer)) return;
+        public static void SerializeField<T>(in ByteBuffer buffer, ref T obj, in FieldInfo info) {
+            if (!FieldSerializerCache<T>.TryGetWithThrowOnFailure(info, out var serializer)) return;
             serializer.Serialize(buffer, ref obj);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void DeserializeFieldInto<TObject>(in ByteBuffer buffer, ref TObject obj, in FieldInfo info) {
-            if (!FieldSerializerCache<TObject>.TryGetWithThrowOnFailure(info, out var serializer)) return;
+        public static void DeserializeFieldInto<T>(in ByteBuffer buffer, ref T obj, in FieldInfo info) {
+            if (!FieldSerializerCache<T>.TryGetWithThrowOnFailure(info, out var serializer)) return;
             serializer.Deserialize(buffer, ref obj);
         }
     }

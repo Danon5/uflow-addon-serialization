@@ -1,6 +1,8 @@
 ﻿using System;
+using UnityEngine.Scripting;
 
 namespace UFlow.Addon.Serialization.Core.Runtime {
+    [Preserve]
     internal sealed class ArraySerializer<T> : ISerializer<T[]> {
         public void Serialize(in ByteBuffer buffer, ref T[] value) {
             buffer.Write(value.Length);

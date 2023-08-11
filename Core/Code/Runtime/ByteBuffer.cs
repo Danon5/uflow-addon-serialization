@@ -254,8 +254,8 @@ namespace UFlow.Addon.Serialization.Core.Runtime {
         public Span<byte> GetBytesToCursor() => new(m_buffer, 0, Cursor + 1);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public unsafe void WriteUnsafe<T>(T value) {
-            var size = Marshal.SizeOf<T>();
+        public unsafe void WriteUnsafe<T>(T value) where T : unmanaged {
+            var size = sizeof(T);
             if (m_autoResize)
                 EnsureLength(ref m_buffer, Cursor + size);
             var ptr = (byte*)Unsafe.AsPointer(ref value);
@@ -271,7 +271,7 @@ namespace UFlow.Addon.Serialization.Core.Runtime {
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void WriteArrayUnsafe<T>(in ReadOnlySpan<T> span) {
+        public void WriteArrayUnsafe<T>(in ReadOnlySpan<T> span) where T : unmanaged {
             if (m_autoResize)
                 EnsureLength(ref m_buffer, span.Length);
             WriteUnsafe(span.Length);
@@ -280,8 +280,8 @@ namespace UFlow.Addon.Serialization.Core.Runtime {
         }
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public unsafe T ReadUnsafe<T>() {
-            var size = Marshal.SizeOf<T>();
+        public unsafe T ReadUnsafe<T>() where T : unmanaged {
+            var size = sizeof(T);
             var ptr = (byte*)Unsafe.AsPointer(ref m_buffer[Cursor]);
             if (!m_currentSystemUsesLittleEndian) {
                 for (var i = 0; i < size / 2; i++)
@@ -293,7 +293,7 @@ namespace UFlow.Addon.Serialization.Core.Runtime {
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public T[] ReadArrayUnsafe<T>() {
+        public T[] ReadArrayUnsafe<T>() where T : unmanaged {
             var length = ReadUnsafe<int>();
             var values = new T[length];
             for (var i = 0; i < length; i++)
@@ -302,14 +302,14 @@ namespace UFlow.Addon.Serialization.Core.Runtime {
         }
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void ReadArrayIntoUnsafe<T>(in Span<T> span) {
+        public void ReadArrayIntoUnsafe<T>(in Span<T> span) where T : unmanaged {
             var length = ReadUnsafe<int>();
             for (var i = 0; i < length; i++)
                 span[i] = ReadUnsafe<T>();
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void ReadArrayOverwriteUnsafe<T>(ref T[] array) {
+        public void ReadArrayOverwriteUnsafe<T>(ref T[] array) where T : unmanaged {
             var length = ReadUnsafe<int>();
             Array.Resize(ref array, length);
             for (var i = 0; i < length; i++)

@@ -34,5 +34,16 @@ namespace UFlow.Addon.Serialization.Core.Runtime {
             if (!FieldSerializerCache<T>.TryGetWithThrowOnFailure(info, out var serializer)) return;
             serializer.Deserialize(buffer, ref obj);
         }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ulong CalculateHash(in string source) {
+            var hash = 14695981039346656037UL;
+            var typeName = source;
+            foreach (var c in typeName) {
+                hash ^= c;
+                hash *= 1099511628211UL;
+            }
+            return hash;
+        }
     }
 }

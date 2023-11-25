@@ -42,9 +42,13 @@ namespace UFlow.Addon.Serialization.Core.Runtime {
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Write(sbyte value) => WriteUnsafe(value);
-        
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void Write(byte value) => WriteUnsafe(value);
+        public void Write(byte value) {
+            if (m_autoResize)
+                EnsureLength(ref m_buffer, Cursor + 1);
+            m_buffer[Cursor++] = value;
+        }
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Write(bool value) => WriteUnsafe(value);
@@ -78,8 +82,8 @@ namespace UFlow.Addon.Serialization.Core.Runtime {
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Write(string value) {
-            Write((ushort)value.Length);
-            Encoding.UTF8.GetBytes(value, m_buffer.AsSpan(Cursor, Capacity - Cursor));
+            var length = Encoding.UTF8.GetBytes(value, m_buffer.AsSpan(Cursor));
+            Write(m_buffer.AsSpan(Cursor, length));
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -160,8 +164,10 @@ namespace UFlow.Addon.Serialization.Core.Runtime {
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public string ReadString() {
-            var length = ReadUnsafe<ushort>();
-            return Encoding.UTF8.GetString(m_buffer.AsSpan(Cursor, length));
+            var length = ReadInt();
+            var value = Encoding.UTF8.GetString(m_buffer.AsSpan(Cursor, length));
+            Cursor += length;
+            return value;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -247,10 +253,13 @@ namespace UFlow.Addon.Serialization.Core.Runtime {
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void ResetCursor() => Cursor = 0;
+        public void TransferBytesToBuffer(byte[] source, int offset, int count) => Buffer.BlockCopy(source, offset, m_buffer, 0, count);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Span<byte> GetBytesToCursor() => new(m_buffer, 0, Cursor + 1);
+        public void Reset() => Cursor = 0;
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public Span<byte> GetBytesToCursor() => Cursor == 0 ? Span<byte>.Empty : new Span<byte>(m_buffer, 0, Cursor);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public unsafe void WriteUnsafe<T>(T value) where T : unmanaged {

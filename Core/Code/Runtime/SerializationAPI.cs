@@ -10,9 +10,9 @@ namespace UFlow.Addon.Serialization.Core.Runtime {
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static T Deserialize<T>(in ByteBuffer buffer) where T : new() {
+        public static T Deserialize<T>(in ByteBuffer buffer) {
             if (!SerializerCache<T>.TryGetWithThrowOnFailure(out var serializer)) return default;
-            var value = new T();
+            var value = (T)default;
             serializer.Deserialize(buffer, ref value);
             return value;
         }

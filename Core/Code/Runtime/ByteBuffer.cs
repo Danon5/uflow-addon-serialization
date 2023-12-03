@@ -51,7 +51,7 @@ namespace UFlow.Addon.Serialization.Core.Runtime {
         }
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void Write(bool value) => WriteUnsafe(value);
+        public void Write(bool value) => WriteUnsafe((byte)(value ? 1 : 0));
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Write(short value) => WriteUnsafe(value);
@@ -133,7 +133,7 @@ namespace UFlow.Addon.Serialization.Core.Runtime {
         public byte ReadByte() => ReadUnsafe<byte>();
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public bool ReadBool() => ReadUnsafe<bool>();
+        public bool ReadBool() => ReadUnsafe<byte>() == 1;
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public short ReadShort() => ReadUnsafe<short>();

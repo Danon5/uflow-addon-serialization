@@ -323,7 +323,13 @@ namespace UFlow.Addon.Serialization.Core.Runtime {
             for (var i = 0; i < length; i++)
                 array[i] = ReadUnsafe<T>();
         }
-        
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void AppendBufferTo(ByteBuffer other) {
+            Buffer.BlockCopy(m_buffer, 0, other.m_buffer, other.Cursor, Cursor);
+            other.Cursor += Cursor;
+        }
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void EnsureLength<T>(ref T[] array, int length, int maxLength = int.MaxValue) {
             if (array.Length >= length) return;

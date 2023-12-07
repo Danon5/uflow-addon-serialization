@@ -39,7 +39,7 @@ namespace UFlow.Addon.Serialization.Core.Runtime {
             m_buffer = new byte[Capacity];
             m_currentSystemUsesLittleEndian = BitConverter.IsLittleEndian;
         }
-        
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Write(sbyte value) => WriteUnsafe(value);
 
@@ -49,73 +49,73 @@ namespace UFlow.Addon.Serialization.Core.Runtime {
                 EnsureLength(ref m_buffer, Cursor + 1);
             m_buffer[Cursor++] = value;
         }
-        
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Write(bool value) => WriteUnsafe((byte)(value ? 1 : 0));
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Write(short value) => WriteUnsafe(value);
-        
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Write(ushort value) => WriteUnsafe(value);
-        
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Write(int value) => WriteUnsafe(value);
-        
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Write(uint value) => WriteUnsafe(value);
-        
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Write(float value) => WriteUnsafe(value);
-        
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Write(long value) => WriteUnsafe(value);
-        
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Write(ulong value) => WriteUnsafe(value);
-        
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Write(double value) => WriteUnsafe(value);
-        
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Write(char value) => WriteUnsafe(value);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void Write(string value) {
+        public void Write(in string value) {
             var length = Encoding.UTF8.GetBytes(value, m_buffer.AsSpan(Cursor));
             Write(m_buffer.AsSpan(Cursor, length));
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Write(in ReadOnlySpan<sbyte> values) => WriteArrayUnsafe(values);
-        
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Write(in ReadOnlySpan<byte> values) => WriteArrayUnsafe(values);
-        
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Write(in ReadOnlySpan<short> values) => WriteArrayUnsafe(values);
-        
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Write(in ReadOnlySpan<ushort> values) => WriteArrayUnsafe(values);
-        
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Write(in ReadOnlySpan<int> values) => WriteArrayUnsafe(values);
-        
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Write(in ReadOnlySpan<uint> values) => WriteArrayUnsafe(values);
-        
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Write(in ReadOnlySpan<float> values) => WriteArrayUnsafe(values);
-        
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Write(in ReadOnlySpan<long> values) => WriteArrayUnsafe(values);
-        
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Write(in ReadOnlySpan<ulong> values) => WriteArrayUnsafe(values);
-        
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Write(in ReadOnlySpan<double> values) => WriteArrayUnsafe(values);
-        
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Write(in ReadOnlySpan<char> values) => WriteArrayUnsafe(values);
 
@@ -128,37 +128,37 @@ namespace UFlow.Addon.Serialization.Core.Runtime {
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public sbyte ReadSByte() => ReadUnsafe<sbyte>();
-        
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public byte ReadByte() => ReadUnsafe<byte>();
-        
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool ReadBool() => ReadUnsafe<byte>() == 1;
-        
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public short ReadShort() => ReadUnsafe<short>();
-        
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public ushort ReadUShort() => ReadUnsafe<ushort>();
-        
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public int ReadInt() => ReadUnsafe<int>();
-        
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public uint ReadUInt() => ReadUnsafe<uint>();
-        
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public float ReadFloat() => ReadUnsafe<float>();
-        
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public long ReadLong() => ReadUnsafe<long>();
-        
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public ulong ReadULong() => ReadUnsafe<ulong>();
-        
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public double ReadDouble() => ReadUnsafe<double>();
-        
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public char ReadChar() => ReadUnsafe<char>();
 
@@ -172,34 +172,34 @@ namespace UFlow.Addon.Serialization.Core.Runtime {
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public sbyte[] ReadSByteArray() => ReadArrayUnsafe<sbyte>();
-        
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public byte[] ReadByteArray() => ReadArrayUnsafe<byte>();
-        
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public short[] ReadShortArray() => ReadArrayUnsafe<short>();
-        
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public ushort[] ReadUShortArray() => ReadArrayUnsafe<ushort>();
-        
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public int[] ReadIntArray() => ReadArrayUnsafe<int>();
-        
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public uint[] ReadUIntArray() => ReadArrayUnsafe<uint>();
-        
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public float[] ReadFloatArray() => ReadArrayUnsafe<float>();
-        
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public long[] ReadLongArray() => ReadArrayUnsafe<long>();
-        
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public ulong[] ReadULongArray() => ReadArrayUnsafe<ulong>();
-        
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public double[] ReadDoubleArray() => ReadArrayUnsafe<double>();
-        
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public char[] ReadCharArray() => ReadArrayUnsafe<char>();
 
@@ -211,37 +211,37 @@ namespace UFlow.Addon.Serialization.Core.Runtime {
                 arr[i] = ReadString();
             return arr;
         }
-        
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void ReadSByteArrayInto(in Span<sbyte> span) => ReadArrayIntoUnsafe(span);
-        
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void ReadByteArrayInto(in Span<byte> span) => ReadArrayIntoUnsafe(span);
-        
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void ReadShortArrayInto(in Span<short> span) => ReadArrayIntoUnsafe(span);
-        
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void ReadUShortArrayInto(in Span<ushort> span) => ReadArrayIntoUnsafe(span);
-        
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void ReadIntArrayInto(in Span<int> span) => ReadArrayIntoUnsafe(span);
-        
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void ReadUIntArrayInto(in Span<uint> span) => ReadArrayIntoUnsafe(span);
-        
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void ReadFloatArrayInto(in Span<float> span) => ReadArrayIntoUnsafe(span);
-        
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void ReadLongArrayInto(in Span<long> span) => ReadArrayIntoUnsafe(span);
-        
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void ReadULongArrayInto(in Span<ulong> span) => ReadArrayIntoUnsafe(span);
-        
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void ReadDoubleArrayInto(in Span<double> span) => ReadArrayIntoUnsafe(span);
-        
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void ReadCharArrayInto(in Span<char> span) => ReadArrayIntoUnsafe(span);
 
@@ -286,7 +286,7 @@ namespace UFlow.Addon.Serialization.Core.Runtime {
             foreach (var value in span)
                 WriteUnsafe(value);
         }
-        
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public unsafe T ReadUnsafe<T>() where T : unmanaged {
             var size = sizeof(T);
@@ -308,7 +308,7 @@ namespace UFlow.Addon.Serialization.Core.Runtime {
                 values[i] = ReadUnsafe<T>();
             return values;
         }
-        
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void ReadArrayIntoUnsafe<T>(in Span<T> span) where T : unmanaged {
             var length = ReadUnsafe<int>();

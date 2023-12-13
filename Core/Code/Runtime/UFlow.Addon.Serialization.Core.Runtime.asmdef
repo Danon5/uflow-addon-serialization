@@ -2,6 +2,7 @@
     "name": "UFlow.Addon.Serialization.Core.Runtime",
     "rootNamespace": "UFlow.Addon.Serialization.Core.Runtime",
     "references": [
+        "GUID:a28e8ed336e96b444813ab50041fceaf",
         "GUID:bb1ffefc3dfaace4eb1d1ecc2cf4e24a"
     ],
     "includePlatforms": [],
